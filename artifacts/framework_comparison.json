@@ -1,0 +1,550 @@
+{
+  "judge_model": "gpt-4o-mini",
+  "input": "golden_dataset.json + artifacts/actual_answers.json (same 20 saved answers)",
+  "runtime_seconds": {
+    "ragas": 72,
+    "deepeval": 771
+  },
+  "cases": [
+    {
+      "id": "E01",
+      "lab": {
+        "faithfulness": 0.8095238095238095,
+        "relevance": 0.7777777777777778,
+        "completeness": 0.8260869565217391,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "overall": 0.8044628479411089,
+        "passed": true
+      },
+      "ragas": {
+        "faithfulness": 0.6666666666666666,
+        "relevance": 0.9256363155520141,
+        "context_recall": 1.0,
+        "context_precision": 0.9999999999,
+        "correctness": 0.75
+      },
+      "deepeval": {
+        "faithfulness": 1.0,
+        "relevance": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "correctness": 0.85
+      },
+      "deepeval_correctness_reason": "The actual output correctly identifies the required adapter as a 65 W USB-C Power Delivery adapter, aligning with the expected output. However, it lacks the detail that the NovaBook 14 can charge through either USB-C port, which is a minor discrepancy. Overall, the conclusion is accurate, but the omission of specific charging port information slightly reduces the score."
+    },
+    {
+      "id": "E02",
+      "lab": {
+        "faithfulness": 0.5263157894736842,
+        "relevance": 0.5555555555555556,
+        "completeness": 0.84,
+        "context_recall": 0.92,
+        "context_precision": 0.9166666666666666,
+        "overall": 0.6406237816764132,
+        "passed": true
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "relevance": 0.9641616496461034,
+        "context_recall": 1.0,
+        "context_precision": 0.9999999999,
+        "correctness": 0.57
+      },
+      "deepeval": {
+        "faithfulness": 1.0,
+        "relevance": 0.4,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "correctness": 0.832082129433083
+      },
+      "deepeval_correctness_reason": "The actual output correctly states the cost and benefits of the OrbitPlus membership, aligning well with the expected output. However, while it includes all necessary details, the phrasing is slightly less concise than the expected output, which could be improved for clarity. The additional note about exclusions is relevant but adds length without enhancing the core information."
+    },
+    {
+      "id": "E03",
+      "lab": {
+        "faithfulness": 0.6666666666666666,
+        "relevance": 0.5555555555555556,
+        "completeness": 0.9411764705882353,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "overall": 0.721132897603486,
+        "passed": true
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "relevance": 0.0,
+        "context_recall": 1.0,
+        "context_precision": 0.9999999999,
+        "correctness": 0.86
+      },
+      "deepeval": {
+        "faithfulness": 1.0,
+        "relevance": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "correctness": 0.7952075613880782
+      },
+      "deepeval_correctness_reason": "The actual output provides accurate information regarding the shipping times, aligning closely with the expected output. However, it introduces additional details about potential delays for remote areas, which, while informative, diverges slightly from the expected output's focus. This extra information does not affect the core conclusion but slightly alters the presentation of the shipping times."
+    },
+    {
+      "id": "E04",
+      "lab": {
+        "faithfulness": 0.8,
+        "relevance": 0.6,
+        "completeness": 0.26666666666666666,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "overall": 0.5555555555555555,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "relevance": 0.9696427122226873,
+        "context_recall": 1.0,
+        "context_precision": 0.9999999999,
+        "correctness": 0.5
+      },
+      "deepeval": {
+        "faithfulness": 1.0,
+        "relevance": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "correctness": 0.6196227691031175
+      },
+      "deepeval_correctness_reason": "The actual output correctly states the warranty duration of 12 months, aligning with the expected output. However, it lacks additional details about the coverage start conditions for shipped and store-pickup orders, which are crucial for a complete understanding of the warranty terms. This omission affects the overall accuracy of the conclusion."
+    },
+    {
+      "id": "E05",
+      "lab": {
+        "faithfulness": 0.9090909090909091,
+        "relevance": 0.38461538461538464,
+        "completeness": 0.9166666666666666,
+        "context_recall": 0.8333333333333334,
+        "context_precision": 1.0,
+        "overall": 0.7367909867909868,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "relevance": 0.8525338231590285,
+        "context_recall": 0.5,
+        "context_precision": 0.99999999995,
+        "correctness": 1.0
+      },
+      "deepeval": {
+        "faithfulness": 1.0,
+        "relevance": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "correctness": 0.8849753608389135
+      },
+      "deepeval_correctness_reason": "The actual output correctly concludes that OrbitTech staff will never request a password or one-time authentication code, aligning with the expected output. However, it slightly lacks the personal touch of 'your' in the expected output, which could enhance clarity and relatability. Overall, the response is accurate and maintains the essential information, with only a minor discrepancy in wording."
+    },
+    {
+      "id": "M01",
+      "lab": {
+        "faithfulness": 0.32432432432432434,
+        "relevance": 0.8,
+        "completeness": 0.46875,
+        "context_recall": 0.65625,
+        "context_precision": 0.8333333333333333,
+        "overall": 0.5310247747747748,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 0.375,
+        "relevance": 0.7561117802791851,
+        "context_recall": 1.0,
+        "context_precision": 0.9999999999666667,
+        "correctness": 0.62
+      },
+      "deepeval": {
+        "faithfulness": 0.6,
+        "relevance": 0.8333333333333334,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "correctness": 0.2690138964805967
+      },
+      "deepeval_correctness_reason": "The actual output incorrectly states that the purchase qualifies for OrbitPay instalments, while the expected output correctly identifies that the discounted price of USD 288 is below the required USD 300 threshold. Additionally, while both outputs agree on the gift card restriction, the conclusion drawn in the actual output is fundamentally flawed, leading to a significant penalty."
+    },
+    {
+      "id": "M02",
+      "lab": {
+        "faithfulness": 0.47619047619047616,
+        "relevance": 0.6875,
+        "completeness": 0.52,
+        "context_recall": 0.84,
+        "context_precision": 1.0,
+        "overall": 0.5612301587301588,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 0.6666666666666666,
+        "relevance": 0.8571220205218822,
+        "context_recall": 1.0,
+        "context_precision": 0.999999999975,
+        "correctness": 0.4
+      },
+      "deepeval": {
+        "faithfulness": null,
+        "relevance": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 0.9166666666666666,
+        "correctness": 0.7
+      },
+      "deepeval_correctness_reason": "The actual output correctly states that the promotional value of the gift will be deducted from the refund, aligning with the expected output. However, it lacks the detail about the refund process timeline (five to seven business days) and the requirement to return the entire bundle for a full refund, which affects clarity and completeness."
+    },
+    {
+      "id": "M03",
+      "lab": {
+        "faithfulness": 0.8857142857142857,
+        "relevance": 0.47619047619047616,
+        "completeness": 0.6190476190476191,
+        "context_recall": 0.8809523809523809,
+        "context_precision": 1.0,
+        "overall": 0.6603174603174603,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "relevance": 0.5450679580005118,
+        "context_recall": 1.0,
+        "context_precision": 0.8874999999778125,
+        "correctness": 0.75
+      },
+      "deepeval": {
+        "faithfulness": 1.0,
+        "relevance": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "correctness": 0.7433339336858288
+      },
+      "deepeval_correctness_reason": "The actual output correctly identifies the criteria for a package being considered delayed and the conditions for opening a carrier trace, aligning well with the expected output. However, it lacks the detail about the potential for a refund or replacement if the package is confirmed lost, which is a significant omission. The response is clear and concise, but the missing information prevents a perfect score."
+    },
+    {
+      "id": "M04",
+      "lab": {
+        "faithfulness": 0.6,
+        "relevance": 0.6428571428571429,
+        "completeness": 0.5405405405405406,
+        "context_recall": 0.918918918918919,
+        "context_precision": 0.8666666666666667,
+        "overall": 0.5944658944658945,
+        "passed": true
+      },
+      "ragas": {
+        "faithfulness": 0.5,
+        "relevance": 0.8611694217819424,
+        "context_recall": 1.0,
+        "context_precision": 0.94999999997625,
+        "correctness": 0.6
+      },
+      "deepeval": {
+        "faithfulness": 0.75,
+        "relevance": 0.75,
+        "context_recall": 0.8,
+        "context_precision": 1.0,
+        "correctness": 0.6299946119943428
+      },
+      "deepeval_correctness_reason": "The actual output correctly states that the repair is not covered by warranty and mentions the USD 35 diagnostic fee if the repair quote is declined. However, it fails to include the detail about the written quote being valid for seven calendar days and the requirement for approval and payment before work begins, which are critical elements of the expected output. This omission affects the completeness of the response."
+    },
+    {
+      "id": "M05",
+      "lab": {
+        "faithfulness": 0.4666666666666667,
+        "relevance": 0.46153846153846156,
+        "completeness": 0.7777777777777778,
+        "context_recall": 0.9166666666666666,
+        "context_precision": 0.95,
+        "overall": 0.5686609686609687,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "relevance": 0.8620601623127792,
+        "context_recall": 1.0,
+        "context_precision": 0.99999999998,
+        "correctness": 0.74
+      },
+      "deepeval": {
+        "faithfulness": 1.0,
+        "relevance": 0.8888888888888888,
+        "context_recall": 1.0,
+        "context_precision": 0.3333333333333333,
+        "correctness": 0.6472304809328226
+      },
+      "deepeval_correctness_reason": "The actual output provides a comprehensive set of steps to address the issue of a hacked account, which aligns with the expected output's intent. However, it diverges in structure and detail, particularly in the handling of the unauthorized order, where it introduces additional steps and information not present in the expected output. This discrepancy affects the overall alignment, particularly in maintaining the same conditions and exceptions regarding the order status."
+    },
+    {
+      "id": "M06",
+      "lab": {
+        "faithfulness": 0.5625,
+        "relevance": 0.375,
+        "completeness": 0.5625,
+        "context_recall": 0.8125,
+        "context_precision": 0.8666666666666667,
+        "overall": 0.5,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "relevance": 0.8646778404747664,
+        "context_recall": 1.0,
+        "context_precision": 0.8874999999778125,
+        "correctness": 0.8
+      },
+      "deepeval": {
+        "faithfulness": 1.0,
+        "relevance": 0.3333333333333333,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "correctness": 0.7406480358477412
+      },
+      "deepeval_correctness_reason": "The actual output correctly states that opened ear tips cannot be returned due to hygiene reasons, aligning with the expected output. However, it lacks the explicit mention of 'fit or preference' and does not reiterate that in-ear audio products are also non-returnable unless defective, which slightly diminishes its completeness."
+    },
+    {
+      "id": "M07",
+      "lab": {
+        "faithfulness": 0.3793103448275862,
+        "relevance": 0.7,
+        "completeness": 0.45161290322580644,
+        "context_recall": 0.6129032258064516,
+        "context_precision": 0.95,
+        "overall": 0.5103077493511309,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 0.25,
+        "relevance": 0.857096774784336,
+        "context_recall": 0.5,
+        "context_precision": 0.9999999999666667,
+        "correctness": 0.44
+      },
+      "deepeval": {
+        "faithfulness": 0.5,
+        "relevance": 0.75,
+        "context_recall": 0.3333333333333333,
+        "context_precision": 1.0,
+        "correctness": 0.743973139385311
+      },
+      "deepeval_correctness_reason": "The actual output correctly identifies the need for an escalation review and advises against opening a new case, aligning with the expected output. However, it lacks the emphasis on the potential delays caused by duplicate cases, which is a critical detail in the expected response. Overall, the conclusions are similar, but the omission of this specific warning slightly reduces the score."
+    },
+    {
+      "id": "H01",
+      "lab": {
+        "faithfulness": 0.3,
+        "relevance": 0.4444444444444444,
+        "completeness": 0.23076923076923078,
+        "context_recall": 0.7692307692307693,
+        "context_precision": 1.0,
+        "overall": 0.3250712250712251,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 0.0,
+        "relevance": 0.7208436177534776,
+        "context_recall": 0.8,
+        "context_precision": 0.8874999999778125,
+        "correctness": 0.18
+      },
+      "deepeval": {
+        "faithfulness": 0.6666666666666666,
+        "relevance": 0.75,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "correctness": 0.30924741692791824
+      },
+      "deepeval_correctness_reason": "The actual output correctly concludes that the user is not within the return window, but it fails to mention the specific return policy version that applies, which is crucial for understanding the timeframe. It also inaccurately states the return period for opened devices as 14 days instead of the 7 days specified in the expected output. This discrepancy in policy details significantly impacts the correctness of the response."
+    },
+    {
+      "id": "H02",
+      "lab": {
+        "faithfulness": 0.43243243243243246,
+        "relevance": 0.7391304347826086,
+        "completeness": 0.5,
+        "context_recall": 0.7666666666666667,
+        "context_precision": 1.0,
+        "overall": 0.5571876224050137,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 0.5714285714285714,
+        "relevance": 0.7627014331937975,
+        "context_recall": 1.0,
+        "context_precision": 0.9999999999666667,
+        "correctness": 0.71
+      },
+      "deepeval": {
+        "faithfulness": 0.6666666666666666,
+        "relevance": 0.5714285714285714,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "correctness": 0.5525356272057825
+      },
+      "deepeval_correctness_reason": "The actual output correctly identifies the return policy and the timeline, but it fails to mention the critical detail that the 45-day extension only applies if membership was active at the time of the order. This omission leads to a less comprehensive explanation compared to the expected output, which clearly states the reason for the 30-day limit. While the conclusion about the return window is accurate, the lack of clarity on the membership condition detracts from the overall alignment with the expected response."
+    },
+    {
+      "id": "H03",
+      "lab": {
+        "faithfulness": 0.625,
+        "relevance": 0.55,
+        "completeness": 0.4594594594594595,
+        "context_recall": 0.7297297297297297,
+        "context_precision": 0.5333333333333333,
+        "overall": 0.5448198198198199,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 0.8,
+        "relevance": 0.8616448400150701,
+        "context_recall": 1.0,
+        "context_precision": 0.6791666666496875,
+        "correctness": 0.57
+      },
+      "deepeval": {
+        "faithfulness": 1.0,
+        "relevance": 0.8,
+        "context_recall": 0.8,
+        "context_precision": 0.45,
+        "correctness": 0.5905455510878781
+      },
+      "deepeval_correctness_reason": "The actual output correctly states that purchasing OrbitPlus does not convert the repair into a free warranty claim, aligning with the expected output. However, it fails to mention that the damage may still be repairable for a fee, which is a critical detail in the expected output. Additionally, while it addresses the loaner phone availability, it does not clarify that the loaner is only for covered repairs, which is a significant omission."
+    },
+    {
+      "id": "H04",
+      "lab": {
+        "faithfulness": 0.65,
+        "relevance": 0.4827586206896552,
+        "completeness": 0.3469387755102041,
+        "context_recall": 0.7959183673469388,
+        "context_precision": 1.0,
+        "overall": 0.4932324653999531,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 0.6666666666666666,
+        "relevance": 0.7616740926367239,
+        "context_recall": 0.75,
+        "context_precision": 0.8874999999778125,
+        "correctness": 0.29
+      },
+      "deepeval": {
+        "faithfulness": 0.75,
+        "relevance": 1.0,
+        "context_recall": 0.6,
+        "context_precision": 1.0,
+        "correctness": 0.21358593863129607
+      },
+      "deepeval_correctness_reason": "The actual output incorrectly states that OrbitTech will refund the express shipping fee, while the expected output clearly indicates that no refund is available due to the delay being caused by an unavailable recipient. Additionally, both outputs correctly mention the requirement for an adult signature, but the actual output fails to address the option for carrier pickup after a failed delivery attempt, which is a significant detail in the expected output."
+    },
+    {
+      "id": "H05",
+      "lab": {
+        "faithfulness": 0.6,
+        "relevance": 0.5555555555555556,
+        "completeness": 0.4090909090909091,
+        "context_recall": 0.7954545454545454,
+        "context_precision": 0.8875,
+        "overall": 0.5215488215488215,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "relevance": 0.721321887829412,
+        "context_recall": 1.0,
+        "context_precision": 0.8874999999778125,
+        "correctness": 0.67
+      },
+      "deepeval": {
+        "faithfulness": 0.75,
+        "relevance": 0.5,
+        "context_recall": 1.0,
+        "context_precision": 0.8875,
+        "correctness": 0.6360577251193582
+      },
+      "deepeval_correctness_reason": "The actual output correctly states that only one discount applies and explains the refund process for the gift card portion. However, it lacks some details present in the expected output, such as the clarification about the non-refund of standard shipping fees and the emphasis on the larger eligible discount. This results in a less comprehensive response, affecting the overall alignment with the expected output."
+    },
+    {
+      "id": "A01",
+      "lab": {
+        "faithfulness": 0.11538461538461539,
+        "relevance": 0.8888888888888888,
+        "completeness": 0.12,
+        "context_recall": 0.24,
+        "context_precision": 0.325,
+        "overall": 0.3747578347578348,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "relevance": 0.0,
+        "context_recall": 0.5,
+        "context_precision": 0.0,
+        "correctness": 0.8
+      },
+      "deepeval": {
+        "faithfulness": 1.0,
+        "relevance": 0.3333333333333333,
+        "context_recall": 0.5,
+        "context_precision": 0.0,
+        "correctness": 0.3704662830258474
+      },
+      "deepeval_correctness_reason": "The actual output acknowledges the lack of information regarding investment potential, which aligns with the expected output's intent to decline investment advice. However, it fails to clarify that providing investment advice is outside the scope of OrbitTech customer support and does not offer alternative supported topics, which is a significant shortcoming."
+    },
+    {
+      "id": "A02",
+      "lab": {
+        "faithfulness": 0.4782608695652174,
+        "relevance": 0.2,
+        "completeness": 0.2777777777777778,
+        "context_recall": 0.7777777777777778,
+        "context_precision": 0.95,
+        "overall": 0.3186795491143318,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 0.3333333333333333,
+        "relevance": 0.0,
+        "context_recall": 0.75,
+        "context_precision": 0.99999999998,
+        "correctness": 0.5
+      },
+      "deepeval": {
+        "faithfulness": 1.0,
+        "relevance": 0.6666666666666666,
+        "context_recall": 0.6666666666666666,
+        "context_precision": 1.0,
+        "correctness": 0.8449654494581342
+      },
+      "deepeval_correctness_reason": "The actual output correctly refuses to provide order history, aligning with the expected output's conclusion. It emphasizes the need for sufficient authorization, which matches the expected reasoning. However, it could have been slightly more concise by omitting the suggestion to contact customer support, which adds unnecessary length."
+    },
+    {
+      "id": "A03",
+      "lab": {
+        "faithfulness": 0.45454545454545453,
+        "relevance": 0.5,
+        "completeness": 0.36666666666666664,
+        "context_recall": 0.6666666666666666,
+        "context_precision": 1.0,
+        "overall": 0.4404040404040404,
+        "passed": false
+      },
+      "ragas": {
+        "faithfulness": 1.0,
+        "relevance": 0.6430301308439658,
+        "context_recall": 0.6666666666666666,
+        "context_precision": 0.8333333332916666,
+        "correctness": 0.67
+      },
+      "deepeval": {
+        "faithfulness": 0.5,
+        "relevance": 0.5,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "correctness": 0.3947487743569561
+      },
+      "deepeval_correctness_reason": "The actual output correctly states that the PulsePhone X does not include a charger, aligning with the expected output's conclusion. However, it fails to explicitly address the incorrect premise of the user's claim about a missing charger, which is a significant shortcoming. Additionally, it does not mention the USB-C and wireless charging capabilities, which are relevant details in the expected output."
+    }
+  ]
+}

@@ -322,19 +322,36 @@ verbosity bias và self-preference bằng cách nào?
 Chỉ làm sau khi hoàn thành 3.1–3.3. Chọn hai framework trong RAGAS, DeepEval
 và TruLens; chạy hoặc thiết kế một so sánh có cùng input dataset.
 
-| Tiêu chí | Framework 1: ____ | Framework 2: ____ |
+**Phương pháp (đã chạy thật).** Cùng input cho cả hai framework: 20 bộ (question, actual answer, 5 retrieved chunks, expected answer) lấy từ `golden_dataset.json` và `artifacts/actual_answers.json` của lần chạy `2026-09-30T08:30Z`, không sinh lại câu trả lời. Judge của cả hai là `gpt-4o-mini`, temperature 0 (RAGAS dùng thêm `text-embedding-3-small` cho Response Relevancy). Hai framework được cài trong một venv riêng ngoài repo (ragas 0.4.3, deepeval 4.2.7) để code chấm điểm của lab vẫn chỉ phụ thuộc `requirements.txt`. Kết quả từng case lưu ở `artifacts/framework_comparison.json`.
+
+Metric được ghép cặp: RAGAS `Faithfulness` / `ResponseRelevancy` / `LLMContextRecall` / `LLMContextPrecisionWithReference` / `FactualCorrectness`; DeepEval `FaithfulnessMetric` / `AnswerRelevancyMetric` / `ContextualRecallMetric` / `ContextualPrecisionMetric` / `GEval` (tiêu chí Correctness tự viết: cùng kết luận, giữ ngày/số tiền/điều kiện/ngoại lệ, không thưởng độ dài).
+
+| Tiêu chí | Framework 1: RAGAS 0.4.3 | Framework 2: DeepEval 4.2.7 |
 |---|---|---|
-| Setup complexity | | |
-| Metrics available | | |
-| CI/CD integration | | |
-| Kết quả trên cùng dataset | | |
-| Insight rút ra | | |
+| Setup complexity | Cao hơn. Bản mới nhất lỗi import với `langchain-community` 0.4 (`No module named 'langchain_community.chat_models.vertexai'`); phải pin họ langchain về 0.3.x. Cần cả LLM wrapper và embeddings wrapper. | Thấp hơn: cài là chạy, API đơn giản (`LLMTestCase` + `metric.measure()`). Cần tắt telemetry (`DEEPEVAL_TELEMETRY_OPT_OUT`). |
+| Metrics available | Tập metric RAG chuẩn: faithfulness, response relevancy, context recall/precision, factual correctness, noise sensitivity… Chạy batch qua `evaluate()` → DataFrame. | Metric RAG tương đương cộng thêm `GEval` (tiêu chí tùy biến bằng lời), hallucination, bias/toxicity. Mỗi metric có `reason` giải thích điểm. |
+| CI/CD integration | Trả DataFrame; tự viết ngưỡng và gate (giống `run_regression()` của lab). | Tích hợp pytest (`assert_test`, `deepeval test run`) với `threshold` theo metric → gate dễ gắn vào CI. |
+| Kết quả trên cùng dataset | Thời gian 72 s (async batch). Trung bình: Faithfulness 0.741, Relevancy 0.689, Context Recall 0.873, Context Precision 0.895, Factual Correctness 0.621. 0 lỗi. | Thời gian 771 s (mình chạy tuần tự, `async_mode=False`). Trung bình: Faithfulness 0.852 (19/20; 1 lượt M02 lỗi không có điểm), Relevancy 0.754, Context Recall 0.885, Context Precision 0.879, GEval Correctness 0.618. |
+| Insight rút ra | Faithfulness chặt nhất: H01 = 0.00 (bắt được ngày hạn "September 17" không có trong context). Nhưng Response Relevancy cho 0.00 với A01, A02 (từ chối) và cả E03 (câu trả lời đúng). | GEval Correctness bắt đúng nhất các câu sai kết luận: 3 điểm thấp nhất là H04 (0.21), M01 (0.27), H01 (0.31), và `reason` nêu đúng lỗi (M01: "incorrectly states that the purchase qualifies… USD 288 is below the required USD 300"). |
+
+Để đối chiếu, word-overlap của lab trên cùng dữ liệu: Faithfulness 0.553, Relevance 0.569, Completeness 0.522, Context Recall 0.797, Context Precision 0.904.
 
 - Scores có nhất quán không?
 - Framework nào strict hơn và vì sao?
 - Hai framework có tìm ra cùng failure cases không?
 
 > *Phân tích:*
+>
+> **Nhất quán:** chỉ ở mức vừa. Spearman giữa hai framework: Faithfulness 0.539, Correctness 0.358, Context Precision chỉ 0.161. Ví dụ lệch rõ: M05 Context Precision RAGAS 1.00 nhưng DeepEval 0.33; A02 Correctness RAGAS 0.50 nhưng DeepEval 0.84. Hai framework nhất quán ở case retrieval hỏng rõ ràng: A01 Context Precision = 0.00 ở cả hai (khớp với phân tích trace: không có chunk `00_system_scope.md`). So với lab, Completeness word-overlap tương quan với Correctness của DeepEval (0.651) cao hơn với RAGAS (0.554).
+>
+> **Strict hơn:** RAGAS chặt hơn ở Faithfulness (0.741 so với 0.852) và Relevancy (0.689 so với 0.754). Lý do: RAGAS Faithfulness tách câu trả lời thành claims và chỉ tính claim được context **hỗ trợ**, còn DeepEval Faithfulness chủ yếu phạt claim **mâu thuẫn** với context, claim không kiểm chứng được vẫn có thể được tính là faithful. RAGAS Response Relevancy phạt nặng câu trả lời bị coi là "noncommittal", nên mọi lời từ chối (A01, A02) bị 0.00, và E03 (đúng, không từ chối) cũng bị 0.00. [Giả thuyết] câu "These are estimates, not guarantees" bị judge coi là né tránh. Correctness trung bình gần như bằng nhau (0.621 và 0.618), nhưng GEval phân biệt rõ hơn giữa câu sai kết luận và câu chỉ thiếu chi tiết, một phần vì tiêu chí do mình viết nhấn mạnh "kết luận". Đây là thiên lệch của thiết kế cần ghi nhận.
+>
+> **Cùng failure cases?** Không hoàn toàn. Đối chiếu với 4 câu sai thật đã xác minh bằng trace (M01, H01, H03, H04):
+> - DeepEval GEval < 0.5: M01, H01, H04, A01, A03 → bắt 3/4 lỗi thật; bỏ sót H03 (0.59). A01 bị chấm thấp hợp lý (thiếu giải thích vai trò). A03 là **lỗi của judge**: `reason` nói câu trả lời "fails to explicitly address the incorrect premise", trong khi câu trả lời có viết "does not include a charger in the box, so there is no charger to claim".
+> - RAGAS Factual Correctness < 0.5: M02, M07, H01, H04 → bắt 2/4; bỏ sót M01 (0.62), câu sai nguy hiểm nhất, vì phần lớn claim riêng lẻ (giá 320, giảm 10%, 288, luật gift card) đều đúng, chỉ kết luận sai. M07 và M02 bị phạt vì thiếu chi tiết (lý do duplicate case, thời gian hoàn tiền), hợp lý nhưng ít nghiêm trọng hơn.
+> - Word-overlap của lab fail 16/20, gồm cả 4 lỗi thật nhưng lẫn với 12 case khác nên không tách được lỗi thật khỏi false failure.
+>
+> **Kết luận:** không framework nào thay được việc đọc trace. Với OrbitTech, mình chọn **DeepEval GEval** làm judge chính cho correctness (bắt được câu sai kết luận, có `reason` để review, gắn pytest cho CI), cộng **RAGAS Faithfulness** làm kiểm tra phụ vì nó chặt với claim không có nguồn (H01). Cần tránh dùng RAGAS Response Relevancy cho case adversarial, và phải calibrate cả hai với nhãn người chấm (A03 cho thấy judge cũng sai).
 
 ### Exercise 3.5 — Retrieval Reranking (Bonus +5)
 
@@ -347,22 +364,42 @@ thay đổi Context Recall hay không.
 4. Rerank cùng tập chunks, không thêm hoặc xóa chunk.
 5. Tính lại hai metrics và giải thích kết quả.
 
+**Phương pháp.** Dùng đúng 5 chunks đã lưu cho mỗi case trong `artifacts/actual_answers.json` (lần chạy `2026-09-30T08:30Z`), không gọi lại model hay retriever. Reranker là `rerank_by_overlap(contexts, query)` trong `template.py`: sắp chunks theo số content token trùng với **question**, giữ thứ tự gốc khi hòa điểm (`sorted()` ổn định). Query là question chứ không phải expected answer, vì lúc chạy thật hệ thống không có expected answer; dùng expected answer để rerank là data leakage. Mỗi case được kiểm tra: tập chunks sau rerank giống hệt trước (chỉ đổi thứ tự). Recall và Precision tính bằng `RAGASEvaluator` của Task 2b so với expected answer.
+
+Chạy trên cả 20 cases: 13 không đổi, 5 tăng, 2 giảm. Bảng dưới gồm **mọi case có thay đổi** (cả tăng lẫn giảm, không chỉ chọn case đẹp):
+
 | ID | Recall before | Recall after | Precision before | Precision after | Delta Precision |
 |---|---:|---:|---:|---:|---:|
-| | | | | | |
-| | | | | | |
-| | | | | | |
-| | | | | | |
-| | | | | | |
-| **Avg** | | | | | |
+| H03 | 0.730 | 0.730 | 0.533 | 0.867 | +0.333 |
+| H05 | 0.795 | 0.795 | 0.887 | 0.950 | +0.062 |
+| M04 | 0.919 | 0.919 | 0.867 | 0.917 | +0.050 |
+| M07 | 0.613 | 0.613 | 0.950 | 1.000 | +0.050 |
+| A01 | 0.240 | 0.240 | 0.325 | 0.367 | +0.042 |
+| M05 | 0.917 | 0.917 | 0.950 | 0.887 | −0.062 |
+| H04 | 0.796 | 0.796 | 1.000 | 0.950 | −0.050 |
+| **Avg (7 cases)** | **0.716** | **0.716** | **0.787** | **0.848** | **+0.061** |
+
+Trên toàn bộ 20 cases: Recall 0.797 → 0.797, Precision 0.904 → 0.928 (+0.024). Cận trên tham chiếu (oracle, rerank theo chính expected answer, **chỉ để đối chiếu**, không dùng được khi chạy thật): Precision 1.000 cho cả 20 cases, tức mọi case đều có thể đưa chunk liên quan lên đầu.
+
+Nhận xét theo thứ tự chunks (ký hiệu `*` = chunk mà metric coi là liên quan):
+
+- **H03 (+0.333), tăng mạnh nhất:** trước `01, 07*, 06, 03*, 06*` → sau `07*, 06*, 01, 06, 03*`. Chunk noise `01_product_catalog.md` bị đẩy từ hạng 1 xuống hạng 3: nó chỉ trùng 3 token với câu hỏi (`phone`, `pulsephone`, `x`), còn chunk `07` về loaner (`loaner`, `orbitplus`, `phone`, `repair`) và chunk `06` về warranty claim (`claim`, `orbitplus`, `repair`, `warranty`) trùng 4 token.
+- **M05 (−0.062), giảm:** trước `02*, 08*, …` → sau `08*, 08*, 08, 02*, 08*`. Chunk `02` (hủy đơn khi còn `Confirmed`) liên quan nhưng bị đẩy từ hạng 1 xuống hạng 4. Nó trùng 2 token với câu hỏi (`order`, `place`), còn các chunk `08` trùng 2–4 token (`account`, `not`, `order`, `should`). "not" và "should" là từ đệm không nằm trong `STOPWORDS`, nên reranker lexical bị kéo theo từ không mang nội dung; chunk `08` không liên quan lên hạng 3.
+- **H04 (−0.050):** chunk `09` noise vượt lên chunk `03*` ở cuối danh sách; ảnh hưởng nhỏ vì hai chunk `04*` vẫn đứng đầu.
+- **A01 (+0.042) chỉ là tăng trên số:** chunk `08*`, `06*` được metric coi là "liên quan" vì trùng từ "OrbitTech" với expected answer, nhưng không chunk nào chứa quy tắc scope từ `00`. Reranking không sửa được case này.
 
 **Tại sao Recall dự kiến không đổi?**
 
-> *Câu trả lời:*
+> *Câu trả lời:* Context Recall tính trên **hợp** tập từ của mọi chunk: `|expected ∩ ⋃chunks| / |expected|`. Reranking chỉ đổi thứ tự, không thêm hay bớt chunk, nên phép hợp giống hệt và Recall không đổi. Kết quả đo xác nhận: Recall giống nhau ở cả 20 cases. Ngược lại, Context Precision (AP@K) tính Precision@k tại từng hạng có chunk liên quan, nên chỉ phụ thuộc thứ tự; đưa chunk liên quan lên sớm hơn thì tăng (H03), đẩy xuống thì giảm (M05). Hệ quả thực tế: reranking chỉ giúp khi evidence **đã có** trong top-k; nó không cứu được case thiếu evidence như A01.
 
 **Khi nào reranking không đủ và cần sửa retriever/query/chunking?**
 
 > *Câu trả lời:*
+> - **Evidence không nằm trong top-k (Recall thấp):** A01 (Recall 0.240) không có chunk `00_system_scope.md` nào, nên sắp xếp lại 5 chunk sai vẫn sai. Cần sửa retriever: normalization/stemming ("invest" ↔ "investment"), query expansion hoặc dense/hybrid retrieval để xử lý đa nghĩa ("stock" cổ phiếu và "stock" hàng tồn kho), hoặc tăng `top_k` để lấy được nhiều ứng viên hơn cho reranker.
+> - **Câu hỏi nhiều ý, evidence của ý thứ hai bị thiếu:** M07 cần đoạn `09` về duplicate case nhưng chunk `09` lấy về là đoạn khác. Cần tách câu hỏi thành các sub-query (query decomposition) và retrieve cho từng ý.
+> - **Reranker lexical thiên về từ bề mặt của câu hỏi:** M05 cho thấy từ đệm ("not", "should") và từ chung ("account") đủ để đẩy chunk hủy đơn liên quan xuống. Nên dùng cross-encoder reranker hiểu nghĩa thay cho đếm từ trùng.
+> - **Chunk chứa lẫn nhiều quy tắc:** chunking theo đoạn làm một chunk chứa cả version 1.0 và 2.0 (H01) hoặc nhiều quy định khác nhau; khi đó thứ tự đúng vẫn không giúp model chọn đúng quy tắc. Cần chunk nhỏ hơn hoặc gắn metadata (version, effective date) để lọc trước khi sinh câu trả lời.
+> - Reranking cũng không sửa lỗi generation: H01 và M01 đã có chunk đúng ở hạng 1 (Precision 1.000 và 0.833) mà vẫn trả lời sai.
 
 ---
 
